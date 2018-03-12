@@ -13,10 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         createWatcher();
         System.out.println("watcher added");
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/converter.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
+        initStage(primaryStage);
     }
 
 
@@ -24,7 +21,18 @@ public class Main extends Application {
         launch(args);
     }
 
-    private FileWatcher createWatcher() throws Exception{
-        return new FileWatcher( "D:\\Tests");
+    private void initStage(Stage primaryStage) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/converter.fxml"));
+            primaryStage.setTitle("Hello World");
+            primaryStage.setScene(new Scene(root, 300, 275));
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createWatcher() throws Exception{
+        new FileWatcher( "D:\\Tests");
     }
 }
