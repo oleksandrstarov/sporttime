@@ -1,5 +1,8 @@
 package converter.service;
 
+import converter.model.SICard;
+import converter.model.SpecialPunch;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,19 +34,32 @@ public class DataParser {
         for(String row : newRows) {
             createPunches(row.split(";"));
         }
-
-        System.out.println("New Rows");
-        System.out.println(newRows);
         prevData = data;
     }
 
-    private void createPunches(String[] punch) {
-        int siNumber = Integer.parseInt(punch[siCardIndex]);
-        String startTime = punch[startTimeIndex];
-        String finishTime = punch[finishTimeIndex];
-        String[] punches = Arrays.copyOfRange(punch, punchesIndex, punch.length);
+    private void createPunches(String[] punchData) {
+        int siNumber = Integer.parseInt(punchData[siCardIndex]);
+        String startTimeString = punchData[startTimeIndex];
+        String finishTimeString = punchData[finishTimeIndex];
+        String[] punches = Arrays.copyOfRange(punchData, punchesIndex, punchData.length);
 
-        System.out.println("SI: " + siNumber + ", start: " + startTime + ", finish: " + finishTime + " punches: " + punches);
+        SICard card = new SICard();
+        card.SICardNo = siNumber;
+
+        int starTime = startTimeString.length() > 0 ? Utils.convertTime(startTimeString): 0;
+
+        if (starTime > 0) {
+            card.addPunch(SpecialPunch.PunchStart.code, starTime);
+        }
+
+        card.addPunches(punches);
+
+        int finishTime = finishTimeString.length() > 0 ? Utils.convertTime(finishTimeString) : 0;
+        if (finishTime > 0) {
+            card.addPunch(SpecialPunch.PunchFinish.code, finishTime);
+        }
+        System.out.println(card);
+        MeosConnector.sendData(card);
     }
 
     private void setPattern(String pattern) {
@@ -52,7 +68,7 @@ public class DataParser {
         siCardIndex = this.pattern.indexOf(SI_CARD);
         startTimeIndex = this.pattern.indexOf(START_TIME);
         finishTimeIndex = this.pattern.indexOf(FINISH_TIME);
-        punchesIndex = this.pattern.indexOf(PUNCHES);
+        punchesIndex = this.pattern.indexOf(PUNCHES) + 1;
     }
 
     private ArrayList<String> getNewRows(String data) {

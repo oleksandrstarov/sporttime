@@ -17,7 +17,6 @@ package converter.service;
 
 import converter.model.SICard;
 import converter.model.SIPunch;
-import converter.model.SpecialPunch;
 
 import java.io.*;
 import java.net.Socket;
@@ -25,75 +24,42 @@ import java.util.*;
 
 
 public class MeosConnector {
-  public static void main(String[] args) throws Throwable {
-    System.out.println("Send MeOS punch or card."); // Display the string.
-    System.out.print("Enter 'P' to send a punch, 'C' to send a card: ");
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    
-    String line = readCommand(br, "P", "C");
-    
-    SIPunch punch = null;
-    
-    if (line.equalsIgnoreCase("P")) {
-      punch = new SIPunch();
-      System.out.print("Punch, enter control code (2 for Finish):");
-      punch.codeNumber = Short.parseShort(readCommand(br));
-      
-      System.out.print("Enter card number:");
-      punch.SICardNo = Integer.parseInt(readCommand(br));
-      
-      System.out.print("Enter punch time (HH:MM:SS):");
-      punch.codeTime = readTime(br);
+    private int port;
+
+    public MeosConnector(int portNumber) {
+        this.port = portNumber;
     }
-    else {
-      SICard card = new SICard();
-      punch = card;
-      System.out.print("Card, enter card number:");
-      punch.SICardNo = Integer.parseInt(readCommand(br));
-      
-      int time;
-      System.out.print("Enter start time (HH:MM:SS):");
-      time = readTime(br);
-      if (time > 0)
-        card.addPunch(SpecialPunch.PunchStart.code, time);
-      
-      int code = 1;
-      while (code != 0) {
-        System.out.print("Enter punch code (empty to stop):");
-        String codeS = readCommand(br);
-        code = 0;
-        if (!codeS.isEmpty()) {
-          code = Integer.parseInt(codeS);
-          System.out.print("Enter punch code (HH:MM:SS):");
-          time = readTime(br);
-          card.addPunch(code, time);
+
+    public void sendPunchToMeos() throws Throwable {
+
+
+
+       // openConnection(punch);
+    }
+
+    public static void sendData(SICard punch) {
+        try {
+            Socket socket = new Socket("localhost", 10000);
+            OutputStream socketOutputStream = socket.getOutputStream();
+
+            byte[] buffer = punch.serialize();
+            socketOutputStream.write(buffer, 0, buffer.length);
+            socketOutputStream.close();
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            }
         }
-      }
-      
-      System.out.print("Enter finish time (HH:MM:SS):");
-      time = readTime(br);
-      if (time > 0)
-        card.addPunch(SpecialPunch.PunchFinish.code, time);
-    }
 
-    Socket socket = new Socket("localhost", 10000);
-    OutputStream socketOutputStream = socket.getOutputStream();
-    
-    byte[] buffer = punch.serialize();
-    socketOutputStream.write(buffer, 0, buffer.length);
-    socketOutputStream.close();
-    socket.close();
-  }
-
-  private static int readTime(BufferedReader br) throws IOException {
+    private static int readTime(BufferedReader br) throws IOException {
     String[] hms = readCommand(br).split(":");
     int time = 0;
     for (String p:hms)
        time = 60 * time + Integer.parseInt(p);
     return time * 10;
-  }
+    }
 
-  private static String readCommand(BufferedReader br, String... valid) throws IOException {
+    private static String readCommand(BufferedReader br, String... valid) throws IOException {
     String line = null;
     while ((line = br.readLine()) != null) {
       if (valid.length == 0 || Arrays.asList(valid).contains(line.toUpperCase(Locale.ENGLISH))) {
