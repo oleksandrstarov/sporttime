@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 
 public class FileWatcher {
-
+    DataParser parser = new DataParser();
 
 
 
@@ -32,7 +32,8 @@ public class FileWatcher {
             public void onFileChange(File file) {
                 // code for processing change event
                 System.out.println(file);
-                System.out.println(readFileChanges(file));
+                parser.parseData(readFileChanges(file));
+                //System.out.println(readFileChanges(file));
             }
         };
         observer.addListener(listener);
