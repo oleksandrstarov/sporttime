@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -8,25 +9,25 @@
       <Pane layoutX="14.0" layoutY="26.0" prefHeight="117.0" prefWidth="373.0">
          <children>
             <Label layoutY="6.0" text="Путь к папке с файлом (st-chip.csv)" />
-            <TextField layoutY="88.0" prefHeight="25.0" prefWidth="373.0" />
-            <Button layoutX="341.0" layoutY="27.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="..." />
-            <TextField layoutY="27.0" prefHeight="25.0" prefWidth="337.0" />
+            <TextField fx:id="portNumberFiled" layoutY="88.0" prefHeight="25.0" prefWidth="373.0" />
+            <Button layoutX="341.0" layoutY="27.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="25.0" prefWidth="32.0" text="..." />
+            <TextField fx:id="fileAddressField" layoutY="27.0" prefHeight="25.0" prefWidth="337.0" />
             <Label layoutY="69.0" text="Порт для связи с MeOS (по умолчанию 10000)" />
          </children>
       </Pane>
       <Pane layoutX="186.0" layoutY="157.0" prefHeight="25.0" prefWidth="201.0">
          <children>
-          <Button layoutX="57.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Start">
+          <Button fx:id="startBtn" layoutX="57.0" mnemonicParsing="false" onAction="#startApp" prefHeight="25.0" prefWidth="68.0" text="Start">
                <tooltip>
                   <Tooltip text="Сохранить и начать" />
                </tooltip>
             </Button>
-            <Button layoutX="133.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Exit">
+            <Button layoutX="133.0" mnemonicParsing="false" onAction="#exitApp" prefHeight="25.0" prefWidth="68.0" text="Exit">
                <tooltip>
                   <Tooltip text="Выход" />
                </tooltip>
             </Button>
-            <ProgressIndicator layoutX="19.0" prefHeight="25.0" prefWidth="35.0" />
+            <ProgressIndicator fx:id="loader" layoutX="19.0" prefHeight="25.0" prefWidth="35.0" />
          </children>
       </Pane>
    </children>
