@@ -9,9 +9,15 @@
       <Pane layoutX="14.0" layoutY="26.0" prefHeight="117.0" prefWidth="373.0">
          <children>
             <Label layoutY="6.0" text="Путь к папке с файлом (st-chip.csv)" />
-            <TextField fx:id="portNumberFiled" layoutY="88.0" prefHeight="25.0" prefWidth="373.0" />
+            <TextField fx:id="portNumberFiled" layoutY="88.0" prefHeight="25.0" prefWidth="373.0">
+               <tooltip>
+                  <Tooltip text="MeOS стандартный 10000" />
+               </tooltip></TextField>
             <Button layoutX="341.0" layoutY="27.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="25.0" prefWidth="32.0" text="..." />
-            <TextField fx:id="fileAddressField" layoutY="27.0" prefHeight="25.0" prefWidth="337.0" />
+            <TextField fx:id="fileAddressField" layoutY="27.0" prefHeight="25.0" prefWidth="337.0">
+               <tooltip>
+                  <Tooltip text="st-chip.csv файл из KuKuD.exe" />
+               </tooltip></TextField>
             <Label layoutY="69.0" text="Порт для связи с MeOS (по умолчанию 10000)" />
          </children>
       </Pane>
@@ -30,5 +36,10 @@
             <ProgressIndicator fx:id="loader" layoutX="19.0" prefHeight="25.0" prefWidth="35.0" />
          </children>
       </Pane>
+      <Button layoutX="14.0" layoutY="157.0" mnemonicParsing="false" onAction="#showInfo" prefHeight="25.0" prefWidth="25.0" text="?">
+         <tooltip>
+            <Tooltip text="О приложении" />
+         </tooltip>
+      </Button>
    </children>
 </Pane>
