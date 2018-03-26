@@ -24,22 +24,15 @@ import java.util.*;
 
 
 public class MeosConnector {
-    private int port;
+    public int port;
 
     public MeosConnector(int portNumber) {
         this.port = portNumber;
     }
 
-    public void sendPunchToMeos() throws Throwable {
-
-
-
-       // openConnection(punch);
-    }
-
     public static void sendData(SICard punch) {
         try {
-            Socket socket = new Socket("localhost", 10000);
+            Socket socket = new Socket("localhost", Settings.getInstance().getPort());
             OutputStream socketOutputStream = socket.getOutputStream();
 
             byte[] buffer = punch.serialize();

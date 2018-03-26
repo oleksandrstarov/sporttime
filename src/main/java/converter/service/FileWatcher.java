@@ -14,26 +14,15 @@ public class FileWatcher {
 
 
 
-    public FileWatcher (String path) throws Exception {
-        FileAlterationObserver observer = new FileAlterationObserver(path);
+    public FileWatcher () throws Exception {
+        FileAlterationObserver observer = new FileAlterationObserver(Settings.getInstance().getPath());
         FileAlterationMonitor monitor = new FileAlterationMonitor();
         FileAlterationListener listener = new FileAlterationListenerAdaptor() {
             @Override
-            public void onFileCreate(File file) {
-                // code for processing creation event
-            }
-
-            @Override
-            public void onFileDelete(File file) {
-                // code for processing deletion event
-            }
-
-            @Override
             public void onFileChange(File file) {
-                // code for processing change event
-                System.out.println(file);
-                parser.parseData(readFileChanges(file));
-                //System.out.println(readFileChanges(file));
+                if (Settings.getInstance().getFileName().equals(file.getName())) {
+                    parser.parseData(readFileChanges(file));
+                }
             }
         };
         observer.addListener(listener);
@@ -42,7 +31,7 @@ public class FileWatcher {
     }
 
     private String readFileChanges (File file) {
-        String line = null;
+        String line;
         StringBuilder stringBuilder = new StringBuilder();
         String ls = System.getProperty("line.separator");
 
