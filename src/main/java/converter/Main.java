@@ -4,7 +4,6 @@ import converter.controller.Controller;
 import converter.service.FileWatcher;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -14,10 +13,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private Controller controller;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        //createWatcher();
+    public void start(Stage primaryStage) {
         System.out.println("watcher added");
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ST>>>MeOS");
@@ -54,7 +53,7 @@ public class Main extends Application {
 
             rootLayout.setCenter(applicationView);
 
-            Controller controller = loader.getController();
+            controller = loader.getController();
             controller.setMainApp(this);
 
             primaryStage.show();
@@ -67,7 +66,7 @@ public class Main extends Application {
         return primaryStage;
     }
 
-    private void createWatcher() throws Exception{
-        new FileWatcher( "D:\\Tests");
+    public void createWatcher() throws Exception {
+        new FileWatcher();
     }
 }
