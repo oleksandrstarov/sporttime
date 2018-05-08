@@ -41,24 +41,10 @@ public class MeosConnector {
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();
-            }
+            Log.getInstance().error(e);
+        }  catch (Error e) {
+            e.printStackTrace();
+            Log.getInstance().error(e);
         }
-
-    private static int readTime(BufferedReader br) throws IOException {
-    String[] hms = readCommand(br).split(":");
-    int time = 0;
-    for (String p:hms)
-       time = 60 * time + Integer.parseInt(p);
-    return time * 10;
     }
-
-    private static String readCommand(BufferedReader br, String... valid) throws IOException {
-    String line = null;
-    while ((line = br.readLine()) != null) {
-      if (valid.length == 0 || Arrays.asList(valid).contains(line.toUpperCase(Locale.ENGLISH))) {
-        break;
-      }
-    }
-    return line;
-  }
 }

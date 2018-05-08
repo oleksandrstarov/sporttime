@@ -1,5 +1,7 @@
 package converter.model;
 
+import converter.service.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,8 +26,10 @@ public class SIPunch {
         try {
             oos = new DataOutputStream(bs);
             serialize(oos);
-        } catch (IOException e) {
-            return null;
+        } catch (Exception e) {
+            Log.getInstance().error(e);
+        } catch (Error e) {
+            Log.getInstance().error(e);
         }
         return bs.toByteArray();
     }

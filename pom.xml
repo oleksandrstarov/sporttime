@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>sporttime</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <build>
         <plugins>
             <plugin>
@@ -17,6 +17,28 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>converter.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
@@ -31,12 +53,12 @@
                         </goals>
                         <configuration>
                             <headerType>gui</headerType>
-                            <jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
+                            <jar>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</jar>
                             <outfile>${project.build.directory}/${project.artifactId}-${project.version}.exe</outfile>
                             <downloadUrl>http://java.com/download</downloadUrl>
+
                             <classPath>
                                 <mainClass>converter.Main</mainClass>
-                                <preCp>anything</preCp>
                             </classPath>
                             <icon>src/main/resources/icon.ico</icon>
                             <jre>
@@ -65,7 +87,8 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.6</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

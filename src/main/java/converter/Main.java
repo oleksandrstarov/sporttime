@@ -2,6 +2,7 @@ package converter;
 
 import converter.controller.Controller;
 import converter.service.FileWatcher;
+import converter.service.Log;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,7 +18,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        System.out.println("watcher added");
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ST>>>MeOS");
         this.primaryStage.getIcons().add(new Image(getClass().getResource("/icon.png").toString()));

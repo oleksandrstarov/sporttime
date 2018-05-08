@@ -1,0 +1,4 @@
+Apr 07, 2018 10:44:48 PM converter.service.Log <init>
+INFO: My first log
+Apr 07, 2018 10:44:48 PM converter.service.Log log
+INFO: test start
