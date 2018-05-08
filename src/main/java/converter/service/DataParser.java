@@ -26,58 +26,94 @@ public class DataParser {
     }
 
     public void parseData(String data) {
-        if (pattern.isEmpty()) {
-            setPattern(data.split(System.lineSeparator())[0]);
-        }
-        ArrayList<String> newRows = getNewRows(data);
+        try {
+            if (pattern.isEmpty()) {
+                setPattern(data.split(System.lineSeparator())[0]);
+            }
+            ArrayList<String> newRows = getNewRows(data);
 
-        for(String row : newRows) {
-            createPunches(row.split(";"));
+            for(String row : newRows) {
+                System.out.println(row);
+                createPunches(row.split(";"));
+            }
+            prevData = data;
+        } catch (Exception e) {
+            Log.getInstance().error(e);
+        }  catch (Error e) {
+            Log.getInstance().error(e);
         }
-        prevData = data;
+
     }
 
     private void createPunches(String[] punchData) {
-        int siNumber = Integer.parseInt(punchData[siCardIndex]);
-        String startTimeString = punchData[startTimeIndex];
-        String finishTimeString = punchData[finishTimeIndex];
-        String[] punches = Arrays.copyOfRange(punchData, punchesIndex, punchData.length);
+        try {
+            int siNumber = Integer.parseInt(punchData[siCardIndex]);
+            String startTimeString = punchData[startTimeIndex];
+            String finishTimeString = punchData[finishTimeIndex];
+            String[] punches = Arrays.copyOfRange(punchData, punchesIndex, punchData.length);
 
-        SICard card = new SICard();
-        card.SICardNo = siNumber;
+            SICard card = new SICard();
+            card.SICardNo = siNumber;
 
-        int starTime = startTimeString.length() > 0 ? Utils.convertTime(startTimeString): 0;
+            int starTime = startTimeString.length() > 0 ? Utils.convertTime(startTimeString): 0;
 
-        if (starTime > 0) {
-            card.addPunch(SpecialPunch.PunchStart.code, starTime);
+            if (starTime > 0) {
+                card.addPunch(SpecialPunch.PunchStart.code, starTime);
+            }
+
+            card.addPunches(punches);
+
+            int finishTime = finishTimeString.length() > 0 ? Utils.convertTime(finishTimeString) : 0;
+            if (finishTime > 0) {
+                card.addPunch(SpecialPunch.PunchFinish.code, finishTime);
+            }
+            MeosConnector.sendData(card);
+
+        } catch (Exception e) {
+            Log.getInstance().error(e);
+        } catch (Error e) {
+            Log.getInstance().error(e);
         }
-
-        card.addPunches(punches);
-
-        int finishTime = finishTimeString.length() > 0 ? Utils.convertTime(finishTimeString) : 0;
-        if (finishTime > 0) {
-            card.addPunch(SpecialPunch.PunchFinish.code, finishTime);
-        }
-        System.out.println(card);
-        MeosConnector.sendData(card);
     }
 
     private void setPattern(String pattern) {
-        this.pattern = new ArrayList<>(Arrays.asList(pattern.split(";")));
+        try {
+            this.pattern = new ArrayList<>(Arrays.asList(pattern.split(";")));
 
-        siCardIndex = this.pattern.indexOf(SI_CARD);
-        startTimeIndex = this.pattern.indexOf(START_TIME);
-        finishTimeIndex = this.pattern.indexOf(FINISH_TIME);
-        punchesIndex = this.pattern.indexOf(PUNCHES) + 1;
+            siCardIndex = this.pattern.indexOf(SI_CARD);
+            startTimeIndex = this.pattern.indexOf(START_TIME);
+            finishTimeIndex = this.pattern.indexOf(FINISH_TIME);
+            punchesIndex = this.pattern.indexOf(PUNCHES) + 1;
+        } catch (Exception e) {
+            Log.getInstance().error(e);
+        } catch (Error e) {
+            Log.getInstance().error(e);
+        }
     }
 
     private ArrayList<String> getNewRows(String data) {
-        boolean isInitialRead = "".equals(prevData);
-        data = data.replace(prevData, "");
-        ArrayList<String> newData = new ArrayList<>(Arrays.asList(data.split(System.lineSeparator())));
-        if (isInitialRead) {
-            newData = new ArrayList<>(newData.subList(2, newData.size()));
+        try {
+            boolean isInitialRead = "".equals(prevData);
+            data = data.replace(prevData, "");
+            ArrayList<String> newData = new ArrayList<>(Arrays.asList(data.split(System.lineSeparator())));
+            if (isInitialRead) {
+                newData = new ArrayList<>(newData.subList(2, newData.size()));
+            }
+            for(int i=0; i< newData.size(); i++) {
+                if (newData.get(i).indexOf(";") == -1) {
+                    newData.remove(i);
+                    i--;
+                }
+            }
+
+            return newData;
+
+        } catch (Exception e) {
+            Log.getInstance().error(e);
+            return new ArrayList<>();
+        } catch (Error e) {
+            Log.getInstance().error(e);
+            return new ArrayList<>();
         }
-        return newData;
     }
 }

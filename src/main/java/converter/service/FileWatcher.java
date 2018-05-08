@@ -44,7 +44,9 @@ public class FileWatcher {
 
             return stringBuilder.toString();
         } catch (Exception e) {
-            System.out.println(e);
+            Log.getInstance().error(e);
+        } catch (Error e) {
+            Log.getInstance().error(e);
         }
         return stringBuilder.toString();
     }
